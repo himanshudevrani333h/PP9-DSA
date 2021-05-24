@@ -46,31 +46,30 @@ public class countsort {
 
     }
 
-    public static int[] sortwithrecur(int arr[], int si, int ei, int res[],int idx) {
-        if (si == ei){
-            res[idx++] = arr[si];
-            return res;
+    public static void swap(int a[], int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+    public static void sortwithrecur(int arr[], int si, int ei) {
+        if (si >= ei) {
+            return;
         }
         int num = arr[si];
-        int rec[] = sortwithrecur(arr, si + 1, ei, res,idx);
-        int itr =0;
-        while(itr < rec.length)
-        {
-             if( rec[itr] > num)
-             {
-                 
-             }
+        sortwithrecur(arr, si + 1, ei);
+        while (si < arr.length) {
+            if (arr[si + 1] > num) {
+                swap(arr, si + 1, si);
+            }
         }
-
-        return res;
-
     }
 
     public static void main(String[] args) {
         // int arr[] = { 2, 2, -5, 7, 2, 4, 1, 0, 8, 10 };
         int arr[] = { -2, -3, 8, 1, 5 };
-        int res[] = sortwithrecur(arr, 0, arr.length - 1, new int[arr.length],0);
-        for (int e : res)
+        sortwithrecur(arr, 0, arr.length - 1);
+        for (int e : arr)
             System.out.print(e + " ");
     }
 }
