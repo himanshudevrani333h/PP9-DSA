@@ -56,12 +56,12 @@ public class countsort {
         if (si >= ei) {
             return;
         }
-        int num = arr[si];
         sortwithrecur(arr, si + 1, ei);
-        while (si < arr.length) {
-            if (arr[si + 1] > num) {
+        while (si <ei) {
+            if (arr[si + 1] < arr[si])
                 swap(arr, si + 1, si);
-            }
+            si++;
+
         }
     }
 
