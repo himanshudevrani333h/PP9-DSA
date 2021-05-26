@@ -133,13 +133,21 @@ public class linkedlist {
             return removeLast().data;
     }
 
-    private void removeAtNode(int idx) {
+    private Node removeAtNode(int idx) {
         if (idx == 0)
-            this.head = this.tail = null;
+            return removeFirstNode();
+        else if (idx == this.size - 1)
+            return removeLast();
         else {
-            Node prev = getAtNode(idx - 1);
-            prev.next = prev.next.next;
+            Node prevNode = getAtNode(idx - 1);
+            Node node = prevNode.next;
+            Node forwNode = node.next;
+
+            node.next = null;
+            prevNode.next = forwNode;
             this.size--;
+
+            return node;
         }
     }
 
@@ -204,5 +212,35 @@ public class linkedlist {
         else
             addAtnode(idx, data);
     }
+    
+    // ------------------------------------------------------------------------//
+
+    public void oddEven(){
+        Node even = new Node(-1);
+        Node ep = even;
+        Node odd = new Node(-1);
+        Node op = odd;
+        Node curr = head;
+        while( curr != null)
+        {
+            if( curr.data %2 == 0)
+            {
+                ep.next = curr;
+                ep = ep.next;
+            }else{
+                op.next = curr;
+                op= op.next;
+            }
+            
+            curr = curr.next;
+        }
+        
+        op.next= even.next;
+        ep.next = null;
+        this.head = odd.next;
+        if( even.next != null) this.tail = ep;
+        else
+          this.tail = op;
+      }
 
 }

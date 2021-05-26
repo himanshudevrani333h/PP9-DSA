@@ -52,4 +52,77 @@ public class Leetcode {
         return head;
     }
 
+    // GFG Segregate even and odd nodes in a Link List//
+
+    ListNode divide(int N, ListNode head){
+        ListNode even = new ListNode(-1);
+        ListNode ep = even;
+        ListNode odd = new ListNode(-1);
+        ListNode op = odd;
+        ListNode curr = head;
+        
+        while( curr != null)
+        {
+            if( curr.val % 2 ==0)
+            {
+                ep.next = curr;
+                ep = ep.next;
+            }else{
+                op.next = curr;
+                op = op.next;
+            }
+            
+            curr = curr.next;
+        }
+        
+        ep.next = odd.next;
+        op.next = null;
+        
+        return even.next;
+     }
+
+
+    //  83
+
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(-101);
+        ListNode dp = dummy;
+        ListNode curr = head;
+        int size =0;
+        while( curr != null)
+        {
+            while( curr != null && curr.val == dp.val)
+            {
+                ListNode fwd = curr.next;
+                curr.next = null;
+                curr = fwd;
+            }
+            dp.next = curr;
+            if( curr != null){
+                dp = dp.next;
+                curr = curr.next;
+                size++;
+            }
+        }
+         
+        return dummy.next;
+    }
+
+    // 206
+    public ListNode reverseList(ListNode head) {
+        if( head == null || head.next == null) return head;
+        ListNode prev= null;
+        ListNode curr = head;
+        
+        while( curr != null){
+            ListNode fwd = curr.next;
+            curr.next = prev;
+            
+            prev = curr;
+            curr = fwd;
+        }
+        
+        return prev;
+    }
+
 }

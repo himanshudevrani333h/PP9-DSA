@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class clientaccess{
     
     public static void main(String[] args) {
@@ -7,6 +9,7 @@ public class clientaccess{
         // System.out.println( ll.removelast());
         // ll.removeAt(4);
         ll.addAt(4, -2);
-        ll.display();
+        ll.removeAt(4);
+        System.out.print(ll.toString());
     }
 }
