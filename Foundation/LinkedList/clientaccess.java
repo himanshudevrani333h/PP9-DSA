@@ -1,15 +1,18 @@
-import java.util.LinkedList;
 
-public class clientaccess{
-    
+public class clientaccess{ 
     public static void main(String[] args) {
-        linkedlist ll = new linkedlist();
+        linkedlist l1 = new linkedlist();
+        linkedlist l2 = new linkedlist();
         // System.out.println(ll.size());
-        for( int i =1; i<=11; i++) ll.addLast(i);
+        for( int i =1; i<10; i++) l1.addLast(i);
+        for( int i = 5; i<10; i++) l2.addLast(i);
         // System.out.println( ll.removelast());
         // ll.removeAt(4);
-        ll.addAt(4, -2);
-        ll.removeAt(4);
-        System.out.print(ll.toString());
+        // l1.addAt(4, -2);
+        // ll.removeAt(4);
+        // System.out.print(ll.toString());
+        l1.removeAt(0);
+        linkedlist res = addTwoLinkedList(l1, l2);
+        res.display();
     }
 }
