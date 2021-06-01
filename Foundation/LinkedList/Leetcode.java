@@ -124,5 +124,43 @@ public class Leetcode {
         
         return prev;
     }
+    
+   //   21
+    public static ListNode mergetwolist(ListNode head, ListNode tail){
+        if(head ==null || tail == null) return head != null?head:tail;
+        
+        ListNode l1 = head;
+        ListNode l2 = tail;
+        ListNode dummy = new ListNode(-1);
+        ListNode prev= dummy;
+        while( l1 != null && l2 != null){
+            if( l1.val <= l2.val){
+                prev.next = l1;
+                l1 = l1.next;
+            }else{
+                prev.next = l2;
+                l2 = l2.next;
+            }
+            prev = prev.next;
+        }
+        
+        prev.next = l1 != null?l1:l2;
+        return dummy.next;
+    }
+
+    // 148
+    public static ListNode merge_sort(ListNode node){
+         if( node.next == null) return node;
+        
+          ListNode mid = mid(node);
+          ListNode left = node;
+          ListNode right = mid.next;
+          mid.next = null;
+
+          ListNode srt1 = merge_sort(left);
+          ListNode srt2= merge_sort(right);
+          ListNode res = mergetwolist(srt1, srt2);
+          return res;
+    }
 
 }

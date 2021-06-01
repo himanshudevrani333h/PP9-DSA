@@ -1,3 +1,4 @@
+import jdk.nashorn.internal.runtime.regexp.joni.ast.Node;
 
 public class clientaccess{ 
     public static void main(String[] args) {
@@ -11,8 +12,8 @@ public class clientaccess{
         // l1.addAt(4, -2);
         // ll.removeAt(4);
         // System.out.print(ll.toString());
-        l1.removeAt(0);
-        linkedlist res = addTwoLinkedList(l1, l2);
-        res.display();
+        // l1.removeAt(0);
+        Node res = addTwoLinkedList(l1.head, l2.head);
+        
     }
 }

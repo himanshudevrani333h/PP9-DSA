@@ -221,7 +221,7 @@ public class linkedlist {
 
     public  Node addTwoLinkedList(Node l1, Node l2){
      
-        linkedlist res = new linkedlist();
+        // linkedlist res = new linkedlist();
         Node dummy = new Node(-1);
         Node ll1 = reversell(l1);
         Node ll2 = reversell(l2);
@@ -243,6 +243,7 @@ public class linkedlist {
         Node res2 = dummy.next;
         res2 = reversell(res2);
         // res.head = res2;
+        // res.addFirst(res2);
         return res2;
     }
 
@@ -413,6 +414,89 @@ public class linkedlist {
             tail = mid;
         else
             tail = mid.next;
+    }
+
+    
+    private int lengthOfLL(Node node) {
+        if (node == null)
+            return 0;
+
+        Node curr = node;
+        int len = 0;
+        while (curr != null) {
+            curr = curr.next;
+            len++;
+        }
+
+        return len;
+    }
+
+    private int findIntersection(Node one, Node two) {
+        int a = lengthOfLL(one);
+        int b = lengthOfLL(two);
+
+        Node biggerListHead = a > b ? one : two;
+        Node smallerListHead = b < a ? two : one;
+        int diff = Math.abs(a - b);
+
+        while (diff-- > 0)
+            biggerListHead = biggerListHead.next;
+
+        while (biggerListHead != smallerListHead) {
+            biggerListHead = biggerListHead.next;
+            smallerListHead = smallerListHead.next;
+        }
+
+        return smallerListHead != null ? smallerListHead.data : -1;
+    }
+
+    public int findIntersection(linkedlist one, linkedlist two) {
+        return findIntersection(one.head, two.head);
+    }
+
+    public boolean IsPalindrome() {
+        Node mid = midNode(head);
+        Node nHead = mid.next;
+        mid.next = null;
+
+        nHead = reverse(nHead);
+        Node c1 = head, c2 = nHead;
+        boolean isPalindrome = true;
+        while (c2 != null) {
+            if (c1.data != c2.data) {
+                isPalindrome = false;
+                break;
+            }
+            c1 = c1.next;
+            c2 = c2.next;
+        }
+
+        nHead = reverse(nHead);
+        mid.next = nHead;
+
+        return isPalindrome;
+    }
+
+    Node ptr = head;
+
+    public boolean IsPalindrome(Node node) {
+        if (node == null) {
+            return true;
+        }
+
+        if (!IsPalindrome(node.next))
+            return false;
+        if (node.data != ptr.data)
+            return false;
+
+        ptr = ptr.next;
+        return true;
+
+    }
+
+    public boolean IsPalindrome2() {
+        ptr = head;
+        return IsPalindrome(head);
     }
 
 }
