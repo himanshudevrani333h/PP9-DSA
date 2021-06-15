@@ -6,7 +6,7 @@ public class Queue {
     private int size;
     private int maxsize;
 
-    private void initialize(int len) {
+    protected void initialize(int len) {
         this.arr = new int[len];
         this.front = 0;
         this.rear = 0;
@@ -43,7 +43,9 @@ public class Queue {
          sb.append("]");
         return sb.toString();
     }
-
+    public int maaxsize(){
+        return this.maxsize;
+    }
     public void queueunderflow() throws Exception {
         if (this.size == 0)
             throw new Exception("queueunderflow: lol");

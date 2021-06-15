@@ -5,7 +5,7 @@ public class stack {
     private int tos;
     private int maxsize;
 
-    private void initialize(int len) {
+    protected void initialize(int len) {
         this.arr = new int[len];
         this.size = 0;
         this.tos = -1;
@@ -33,6 +33,10 @@ public class stack {
         }
 
         return sb.toString();
+    }
+
+    public int maxsize(){
+        return this.maxsize;
     }
 
     public void stackunderflow() throws Exception {
