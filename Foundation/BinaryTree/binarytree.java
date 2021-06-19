@@ -341,7 +341,7 @@ public class binarytree {
             return res;
         }
 
-        res.height = Math.max(leftpair.height, rightpair.height);
+        res.height = Math.max(leftpair.height, rightpair.height) + 1;
 
         return res;
     }
@@ -361,7 +361,7 @@ public class binarytree {
 
         tilt_pair res = new tilt_pair();
         res.tiltSF = left.tiltSF + right.tiltSF + Math.abs(left.sum - right.sum);
-        res.sum = left.sum + right.sum;
+        res.sum = left.sum + right.sum + root.data;
 
         return res;
     }
