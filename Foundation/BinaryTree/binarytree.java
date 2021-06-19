@@ -285,7 +285,7 @@ public class binarytree {
 
         isBSTpair self = new isBSTpair();
         self.isbst = false;
-        if (left.minele < root.data && right.maxele > root.data) {
+        if (left.maxele < root.data && right.minele > root.data) {
             self.minele = Math.min(left.minele, root.data);
             self.maxele = Math.max(right.maxele, root.data);
             self.isbst = true;
