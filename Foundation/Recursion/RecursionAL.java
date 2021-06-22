@@ -46,68 +46,67 @@ public class RecursionAL {
     }
 
     // public static ArrayList<String> decode(String str) {
-    // char key[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-    // 'm', 'n', 'o', 'p', 'q', 'r', 's',
-    // 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-    // if (str.length() == 0) {
-    // ArrayList<String> base = new ArrayList<>();
-    // base.add("");
-    // return base;
-    // }
-    // if (str.charAt(0) == '0') {
-    // return new ArrayList<>();
-    // }
-    // char ch1 = str.charAt(0);
-    // // char ch2=str.charAt(1);
-    // char temp1 = key[(ch1 - '0') - 1];
-    // // char temp2 = key[(ch2 -'0') -1];
-    // ArrayList<String> recur = decode(str.substring(1));
-    // ArrayList<String> res = new ArrayList<>();
-    // for (String s : recur) {
-    // res.add(temp1 + s);
+    //     char key[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+    //             't', 'u', 'v', 'w', 'x', 'y', 'z' };
+    //     if (str.length() == 0) {
+    //         ArrayList<String> base = new ArrayList<>();
+    //         base.add("");
+    //         return base;
+    //     }
+    //     if (str.charAt(0) == '0') {
+    //         return new ArrayList<>();
+    //     }
+    //     char ch1 = str.charAt(0);
+    //     // char ch2=str.charAt(1);
+    //     char temp1 = key[(ch1 - '0') - 1];
+    //     // char temp2 = key[(ch2 -'0') -1];
+    //     ArrayList<String> recur = decode(str.substring(1));
+    //     ArrayList<String> res = new ArrayList<>();
+    //     for (String s : recur) {
+    //         res.add(temp1 + s);
 
+    //     }
+
+    //     if (str.length() > 1) {
+    //         if (((ch1 - '0') * 10 + (str.charAt(1) - '0') <= 26)) {
+    //             ArrayList<String> recur2 = decode(str.substring(2));
+    //             for (String s : recur2) {
+    //                 res.add(key[(((ch1 - '0') * 10 + (str.charAt(1) - '0')) - 1)] + s);
+    //             }
+    //         }
+    //     }
+    //     return res;
     // }
 
-    // if (str.length() > 1) {
-    // if (((ch1 - '0') * 10 + (str.charAt(1) - '0') <= 26)) {
-    // ArrayList<String> recur2 = decode(str.substring(2));
-    // for (String s : recur2) {
-    // res.add(key[(((ch1 - '0') * 10 + (str.charAt(1) - '0')) - 1)] + s);
-    // }
-    // }
-    // }
-    // return res;
-    // }
-
-    // 11283, 11023, 0 , 113410111
+    // // 11283, 11023, 0 , 113410111
     // public static ArrayList<String> decodeWays(String str) {
-    // if (str.length() == 0) {
-    // ArrayList<String> base = new ArrayList<>();
-    // base.add("");
-    // return base;
-    // }
+    //     if (str.length() == 0) {
+    //         ArrayList<String> base = new ArrayList<>();
+    //         base.add("");
+    //         return base;
+    //     }
 
-    // if (str.charAt(0) == '0')
-    // return new ArrayList<>();
+    //     if (str.charAt(0) == '0')
+    //         return new ArrayList<>();
 
-    // char ch1 = str.charAt(0);
-    // ArrayList<String> myAns = new ArrayList<>();
-    // ArrayList<String> recAnsFor1Len = decodeWays(str.substring(1));
-    // for (String s : recAnsFor1Len) {
-    // myAns.add((char) ('a' + ch1 - '1') + s);
-    // }
+    //     char ch1 = str.charAt(0);
+    //     ArrayList<String> myAns = new ArrayList<>();
+    //     ArrayList<String> recAnsFor1Len = decodeWays(str.substring(1));
+    //     for (String s : recAnsFor1Len) {
+    //         myAns.add((char) ('a' + ch1 - '1') + s);
+    //     }
 
-    // if (str.length() > 1) {
-    // int num = (ch1 - '0') * 10 + (str.charAt(1) - '0');
-    // if (num <= 26) {
-    // ArrayList<String> recAnsFor2Len = decodeWays(str.substring(2));
-    // for (String s : recAnsFor2Len) {
-    // myAns.add((char) ('a' + num - 1) + s);
-    // }
-    // }
-    // }
+    //     if (str.length() > 1) {
+    //         int num = (ch1 - '0') * 10 + (str.charAt(1) - '0');
+    //         if (num <= 26) {
+    //             ArrayList<String> recAnsFor2Len = decodeWays(str.substring(2));
+    //             for (String s : recAnsFor2Len) {
+    //                 myAns.add((char) ('a' + num - 1) + s);
+    //             }
+    //         }
+    //     }
 
-    // return myAns;
+    //     return myAns;
     // }
 
     public static ArrayList<String> getstairpath(int n) {
@@ -200,7 +199,7 @@ public class RecursionAL {
         for (int jmp = 1; sc + jmp <= dc; jmp++) {
 
             ArrayList<String> hz = mazepathwithinfinitejumps(sr, sc + jmp, dr, dc);
-            
+
             for (String s : hz) {
 
                 res.add("h" + jmp + s);
@@ -209,8 +208,8 @@ public class RecursionAL {
 
         for (int jmp = 1; sr + jmp <= dr && sc + jmp <= dc; jmp++) {
 
-            ArrayList<String> diag = mazepathwithinfinitejumps(sr + jmp, sc+jmp, dr, dc);
-            
+            ArrayList<String> diag = mazepathwithinfinitejumps(sr + jmp, sc + jmp, dr, dc);
+
             for (String s : diag) {
 
                 res.add("d" + jmp + s);
@@ -220,7 +219,7 @@ public class RecursionAL {
         for (int jmp = 1; sr + jmp <= dr; jmp++) {
 
             ArrayList<String> vc = mazepathwithinfinitejumps(sr + jmp, sc, dr, dc);
-            
+
             for (String s : vc) {
 
                 res.add("v" + jmp + s);

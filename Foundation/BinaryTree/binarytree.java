@@ -475,5 +475,48 @@ public class binarytree {
 
         return res;
     }
+    public ArrayList<Node> nodetoroot(Node root, Node node){
+        if( node == null || root == null) return new ArrayList<>();
+        
+        if( root == node){
+            ArrayList<Node> base = new ArrayList<>();
+            base.add(root);
+            return base;
+        }
+        
+        ArrayList<Node> recAns = new ArrayList<>();
+        ArrayList<Node> left = nodetoroot(root.left, node);
+        if( left.size() > 0){
+            left.add(root);
+            return left;
+        }
+        ArrayList<Node> right = nodetoroot(root.right, node);
+         if( right.size() > 0){
+             right.add(root);
+             return right;
+        }
+        
+        return recAns;
+    }
+    public Node lowestCommonAncestor(Node root, Node p, Node q) {
+       
+        ArrayList<Node> list1 = nodetoroot( root, p);
+        ArrayList<Node> list2 = nodetoroot( root, q);
+        
+       int i = list1.size() -1;
+       int j = list2.size() -1;
+       Node res = null;
+       while( i>=0 || j>=0){
+           if( i>=0 && j>=0 && list1.get(i) == list2.get(j)){
+               res = list1.get(i);
+               i--;
+               j--;
+           }else{
+               return res;
+           }
+       }
+       
+       return res;      
+   }
 
 }
