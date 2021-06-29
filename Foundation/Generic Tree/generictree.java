@@ -1,14 +1,17 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class generictree {
 
     public class Node {
         int data;
-        ArrayList<Node> childs;
+        ArrayList<Node> children;
 
         Node(int data) {
             this.data = data;
-            this.childs = new ArrayList<>();
+            this.children = new ArrayList<>();
         }
 
     }
@@ -16,7 +19,7 @@ public class generictree {
     public int size(Node root) {
 
         int sz = 0;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             int size = size(child);
             sz += size;
         }
@@ -27,7 +30,7 @@ public class generictree {
     public int maximum(Node root) {
 
         int max = -(int) 1e9;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             int mx = maximum(child);
             if (mx > max)
                 max = mx;
@@ -38,7 +41,7 @@ public class generictree {
 
     public int minimum(Node root) {
         int min = (int) 1e9;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             int mn = minimum(child);
             if (mn < min)
                 min = mn;
@@ -49,7 +52,7 @@ public class generictree {
 
     public int height(Node root) {
         int height = -1;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             int hg = height(child);
             if (hg > height)
                 height = hg;
@@ -60,7 +63,7 @@ public class generictree {
 
     public int sum(Node root) {
         int sum = 0;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             sum += sum(child);
         }
 
@@ -70,7 +73,7 @@ public class generictree {
     public boolean find(Node root, int data) {
         if (root.data == data)
             return true;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             if (find(child, data))
                 return true;
         }
@@ -83,7 +86,7 @@ public class generictree {
             return true;
 
         boolean flag = false;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             flag = flag || find_2(child, data);
         }
 
@@ -91,11 +94,11 @@ public class generictree {
     }
 
     public static int countLeaves(Node root) {
-        if (root.childs == null)
+        if (root.children == null)
             return 1;
 
         int count = 0;
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
 
             count += countLeaves(child);
 
@@ -113,7 +116,7 @@ public class generictree {
         }
 
         boolean flag = false;
-        for (Node child : root.childs)
+        for (Node child : root.children)
             flag = flag || node_to_root(child, data, res);
 
         if (flag)
@@ -132,7 +135,7 @@ public class generictree {
         }
 
         ArrayList<Integer> recAns = new ArrayList<>();
-        for (Node child : root.childs) {
+        for (Node child : root.children) {
             recAns = node_to_root_2(child, data);
             if (recAns.size() != 0)
                 break;
@@ -219,26 +222,26 @@ public class generictree {
     }
 
     public boolean areTreeSimilarinShape(Node root, Node root2) {
-        if (root.childs.size() != root2.childs.size())
+        if (root.children.size() != root2.children.size())
             return false;
 
         boolean res = true;
 
-        for (int i = 0; i < root.childs.size(); i++)
-            res = res && areTreeSimilarinShape(root.childs.get(i), root2.childs.get(i));
+        for (int i = 0; i < root.children.size(); i++)
+            res = res && areTreeSimilarinShape(root.children.get(i), root2.children.get(i));
         return res;
     }
 
     public boolean isMirrorImage(Node root, Node root2) {
 
-        if (root.childs.size() != root2.childs.size())
+        if (root.children.size() != root2.children.size())
             return false;
 
         boolean res = true;
 
-        for (int i = 0; i < root.childs.size(); i++) {
-            int j = root2.childs.size() - i - 1;
-            res = res && isMirrorImage(root.childs.get(i), root2.childs.get(j));
+        for (int i = 0; i < root.children.size(); i++) {
+            int j = root2.children.size() - i - 1;
+            res = res && isMirrorImage(root.children.get(i), root2.children.get(j));
 
         }
         return res;
@@ -271,7 +274,7 @@ public class generictree {
                 floor = node.data;
             }
         }
-        for (Node child : node.childs) {
+        for (Node child : node.children) {
             ceilAndFloor(child, data);
         }
     }
@@ -280,7 +283,7 @@ public class generictree {
 
         int mx = -(int) 1e9;
 
-        for (Node child : node.childs) {
+        for (Node child : node.children) {
             int reAns = floor(child, ub);
             mx = Math.max(mx, reAns);
         }
@@ -300,24 +303,76 @@ public class generictree {
         return max;
 
     }
-    
-    public Node tail_Of_tree(Node node){
-        while(node.childs.size() != 0){
-            node = node.childs.get(0);
+
+    public Node tail_Of_tree(Node node) {
+        while (node.children.size() != 0) {
+            node = node.children.get(0);
         }
         return node;
     }
 
-    public void LinearizeGenTree(Node root){
+    public void LinearizeGenTree(Node root) {
 
-        for( Node child: root.childs) LinearizeGenTree(child);
+        for (Node child : root.children)
+            LinearizeGenTree(child);
 
-        for(int i = root.childs.size() - 1; i>0; i--){
-            Node tail = tail_Of_tree(root.childs.get(i-1));
-            tail.childs.add(root.childs.get(i)); 
+        for (int i = root.children.size() - 1; i > 0; i--) {
+            Node tail = tail_Of_tree(root.children.get(i - 1));
+            tail.children.add(root.children.get(i));
 
-            root.childs.remove(i);
+            root.children.remove(i);
         }
     }
 
+    public static void levelOrder(Node node) {
+        LinkedList<Node> qu = new LinkedList<>();
+
+        qu.addLast(node);
+        int level = 0;
+        while (qu.size() > 0) {
+            int size = qu.size();
+            while (size-- > 0) {
+                Node removed_node = qu.removeFirst();
+                System.out.print(removed_node.data + " ");
+
+                for (Node child : removed_node.children) {
+                    qu.add(child);
+                }
+            }
+            level++;
+            System.out.println();
+        }
+    }
+
+    public static void levelOrderLinewiseZZ(Node node) {
+        LinkedList<Node> qu = new LinkedList<>();
+        LinkedList<Node> st = new LinkedList<>();
+        qu.addLast(node);
+        int level = 0;
+
+        while (qu.size() > 0) {
+            int sz = qu.size();
+
+            while (sz-- > 0) {
+                Node rmd = qu.removeFirst();
+                System.out.print(rmd.data + " ");
+
+                if (level % 2 == 0) {
+                    for (Node child : rmd.children) {
+                        st.addFirst(child);
+                    }
+                } else {
+                    for (int i = rmd.children.size() - 1; i >= 0; i--) {
+                        st.addFirst(rmd.children.get(i));
+                    }
+                }
+
+            }
+            level++;
+            LinkedList<Node> temp = st;
+            st = qu;
+            qu = temp;
+            System.out.println();
+        }
+    }
 }
