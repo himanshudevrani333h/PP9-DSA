@@ -1,4 +1,7 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class binarytree {
     public static class Node {
@@ -453,7 +456,8 @@ public class binarytree {
 
     public static isbstPair LargestBST(Node root) {
 
-        if(root== null) return new isbstPair();
+        if (root == null)
+            return new isbstPair();
 
         isbstPair leftpair = LargestBST(root.left);
         isbstPair rightpair = LargestBST(root.right);
@@ -467,56 +471,124 @@ public class binarytree {
             res.maxSize = leftpair.maxSize + rightpair.maxSize + 1;
             res.maxbstNode = root;
 
-        }else{
+        } else {
             res.isbst = false;
-            res.maxSize= Math.max(leftpair.maxSize, rightpair.maxSize);
-            res.maxbstNode = leftpair.maxSize >rightpair.maxSize ? leftpair.maxbstNode : rightpair.maxbstNode;
+            res.maxSize = Math.max(leftpair.maxSize, rightpair.maxSize);
+            res.maxbstNode = leftpair.maxSize > rightpair.maxSize ? leftpair.maxbstNode : rightpair.maxbstNode;
         }
 
         return res;
     }
-    public ArrayList<Node> nodetoroot(Node root, Node node){
-        if( node == null || root == null) return new ArrayList<>();
-        
-        if( root == node){
+
+    public ArrayList<Node> nodetoroot(Node root, Node node) {
+        if (node == null || root == null)
+            return new ArrayList<>();
+
+        if (root == node) {
             ArrayList<Node> base = new ArrayList<>();
             base.add(root);
             return base;
         }
-        
+
         ArrayList<Node> recAns = new ArrayList<>();
         ArrayList<Node> left = nodetoroot(root.left, node);
-        if( left.size() > 0){
+        if (left.size() > 0) {
             left.add(root);
             return left;
         }
         ArrayList<Node> right = nodetoroot(root.right, node);
-         if( right.size() > 0){
-             right.add(root);
-             return right;
+        if (right.size() > 0) {
+            right.add(root);
+            return right;
         }
-        
+
         return recAns;
     }
+
     public Node lowestCommonAncestor(Node root, Node p, Node q) {
-       
-        ArrayList<Node> list1 = nodetoroot( root, p);
-        ArrayList<Node> list2 = nodetoroot( root, q);
-        
-       int i = list1.size() -1;
-       int j = list2.size() -1;
-       Node res = null;
-       while( i>=0 || j>=0){
-           if( i>=0 && j>=0 && list1.get(i) == list2.get(j)){
-               res = list1.get(i);
-               i--;
-               j--;
-           }else{
-               return res;
-           }
-       }
-       
-       return res;      
-   }
+
+        ArrayList<Node> list1 = nodetoroot(root, p);
+        ArrayList<Node> list2 = nodetoroot(root, q);
+
+        int i = list1.size() - 1;
+        int j = list2.size() - 1;
+        Node res = null;
+        while (i >= 0 || j >= 0) {
+            if (i >= 0 && j >= 0 && list1.get(i) == list2.get(j)) {
+                res = list1.get(i);
+                i--;
+                j--;
+            } else {
+                return res;
+            }
+        }
+
+        return res;
+    }
+
+    public void LevelORDERTraversal(Node root) {
+        LinkedList<Node> qu = new LinkedList<>();
+        qu.addLast(root);
+        int level = 0;
+        while (qu.size() > 0) {
+            int size = qu.size();
+
+            // for (int i = 0; i < size; i++) {
+            while (size-- > 0) {
+                Node removed_node = qu.removeFirst();
+
+                System.out.print(removed_node.data + " ");
+
+                if (removed_node.left != null) {
+                    qu.addLast(removed_node.left);
+                }
+
+                if (removed_node.right != null) {
+                    qu.addLast(removed_node.right);
+                }
+            }
+            // }
+            level++;
+            System.out.println();
+        }
+    }
+
+    public static void levelOrderLinewiseZZ(Node node) {
+        LinkedList<Node> qu = new LinkedList<>();
+        LinkedList<Node> st = new LinkedList<>();
+        qu.addLast(node);
+        int level = 0;
+
+        while (qu.size() > 0) {
+            int sz = qu.size();
+
+            while (sz-- > 0) {
+                Node rmd = qu.removeFirst();
+                System.out.print(rmd.data + " ");
+
+                if (level % 2 == 0) {
+                    if (rmd.left != null) {
+                        st.addFirst(rmd.left);
+                    }
+                    if (rmd.right != null) {
+                        st.addFirst(rmd.right);
+                    }
+                } else {
+                    if (rmd.right != null) {
+                        st.addFirst(rmd.right);
+                    }
+
+                    if (rmd.left != null) {
+                        st.addFirst(rmd.left);
+                    }
+                }
+            }
+            level++;
+            LinkedList<Node> temp = st;
+            st = qu;
+            qu = temp;
+            System.out.println();
+        }
+    }
 
 }
