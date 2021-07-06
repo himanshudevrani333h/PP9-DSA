@@ -1,0 +1,32 @@
+class Solution {
+     public int dfs(int[][] grid, int srcR , int srcC, int[][] dir){
+     
+     grid[srcR][srcC] = 0;
+     int size = 0;
+     for( int d =0; d<4; d++){
+         int row = srcR + dir[d][0];
+         int col = srcC + dir[d][1];
+         
+         if( row >= 0 && col >= 0 &&  row < grid.length && col < grid[0].length && grid[row][col] == 1 ){
+               
+           size +=  dfs(grid, row, col, dir);
+
+         }
+       }  
+   return size +1;
+    }
+    public int maxAreaOfIsland(int[][] grid) {
+         int row = grid.length , col = grid[0].length;
+        int dir[][] = {{1,0},{0,1},{-1,0},{0,-1}};
+        int maxarea = 0;
+        for( int i = 0; i<row; i++){
+            for( int j =0; j<col; j++){
+                if(grid[i][j] == 1){
+                    int size = dfs(grid, i, j, dir);
+                    maxarea = Math.max(size , maxarea);    
+                }
+            }
+        }
+        return maxarea;
+    }
+}
