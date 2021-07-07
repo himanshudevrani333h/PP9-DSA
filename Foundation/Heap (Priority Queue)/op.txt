@@ -1,0 +1,24 @@
+Company: four
+Model: 4000
+Ram: 8GB
+Storage: 400GB
+BatteryBackup: 100000mAH
+
+Company: three
+Model: 3000
+Ram: 6GB
+Storage: 40GB
+BatteryBackup: 100000mAH
+
+Company: two
+Model: 2000
+Ram: 4GB
+Storage: 4GB
+BatteryBackup: 10000mAH
+
+Company: one
+Model: 1000
+Ram: 4GB
+Storage: 4GB
+BatteryBackup: 1000mAH
+
