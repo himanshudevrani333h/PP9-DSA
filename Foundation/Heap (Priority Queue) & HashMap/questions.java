@@ -32,6 +32,7 @@ public class questions {
         return pq.peek();
     }
 
+    // *
     public static void SortKsortedArray(int arr[][], int k) {
         int n = arr.length, m = arr[0].length;
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
