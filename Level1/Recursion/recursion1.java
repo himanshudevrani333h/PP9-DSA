@@ -485,28 +485,28 @@ public class recursion1 {
         return count;
     }
 
-    public static ArrayList<String> mazePath_HVD_multi_(int sr, int sc, int er, int ec, String psf, ArrayList<String> ans, int[][] dir,
-            String[] dirS) {
-        if (sr == er && sc == ec) {
-            ans.add(psf);
-            return 1;
-        }
+    // public static ArrayList<String> mazePath_HVD_multi_(int sr, int sc, int er, int ec, String psf, ArrayList<String> ans, int[][] dir,
+    //         String[] dirS) {
+    //     if (sr == er && sc == ec) {
+    //         ans.add(psf);
+    //         return 1;
+    //     }
 
-        int count = 0;
-        for (int d = 0; d < dir.length; d++) {
-            for (int rad = 1; rad <= Math.max(er, ec); rad++) {
-                int r = sr + rad * dir[d][0];
-                int c = sc + rad * dir[d][1];
+    //     int count = 0;
+    //     for (int d = 0; d < dir.length; d++) {
+    //         for (int rad = 1; rad <= Math.max(er, ec); rad++) {
+    //             int r = sr + rad * dir[d][0];
+    //             int c = sc + rad * dir[d][1];
 
-                if (r >= 0 && c >= 0 && r <= er && c <= ec) {
-                    count += mazePath_HVD_multi(r, c, er, ec, psf + dirS[d] + rad, ans, dir, dirS);
-                } else
-                    break;
-            }
-        }
+    //             if (r >= 0 && c >= 0 && r <= er && c <= ec) {
+    //                 count += mazePath_HVD_multi(r, c, er, ec, psf + dirS[d] + rad, ans, dir, dirS);
+    //             } else
+    //                 break;
+    //         }
+    //     }
 
-        return count;
-    }
+    //     return count;
+    // }
 
     public static void mazePath() {
         int[][] dir = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
@@ -591,6 +591,44 @@ public int FindWays(int n, int m, int[][] blocked_cells) {
 }
 
 //  Special Matrix-----------------------------------------------
+
+//leetcode max gold problem recursion 1219______________________________________________
+public int getMaximumGold(int[][]grid, int sr, int sc, int dir[][], boolean visited[][]){
+    visited[sr][sc] = true;
+    
+    int max =0;
+    for(int d=0; d< dir.length; d++){
+    
+        int row = sr + dir[d][0];
+        int col = sc + dir[d][1];
+        
+        if( row>=0 && col>=0 && row < grid.length && col< grid[0].length && grid[row][col] != 0 && !visited[row][col]){
+          int recres =  getMaximumGold(grid,row,col,dir,visited);
+            if( recres > max){
+                max = recres;
+            }
+                }
+          }
+    visited[sr][sc] = false;
+    return max + grid[sr][sc];
+}
+
+public int getMaximumGold(int[][] grid) {
+    boolean visited[][] = new boolean[grid.length][grid[0].length];
+    int max = -(int)1e9;
+    int dir[][] = {{0,1},{0,-1},{-1,0},{1,0}};
+    for( int i =0; i<grid.length; i++){
+        for( int j =0; j<grid[0].length; j++){
+            
+            if(grid[i][j] != 0 && !visited[i][j]){
+               max = Math.max(max,getMaximumGold(grid,i,j,dir,visited));
+            }
+               
+        }
+    }
+    return max;
+}
+//leetcode max gold problem recursion 1219______________________________________________
 
     public static void main(String[] args) {
         // recursionPattern(1, 6);
