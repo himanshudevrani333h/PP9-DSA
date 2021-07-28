@@ -151,6 +151,7 @@ public class coins {
 
         return count;
     }
+
     // interview bit subset q
 
     public static void subsetmaker(ArrayList<Integer> al, ArrayList<Integer> smallAns,
@@ -184,12 +185,12 @@ public class coins {
     // ------------------------------------IB________
 
     public static void main(String[] args) {
-        int coins[] = { 2, 3, 5, 6, 7 };
+        int coins[] = { 2, 3, 5, 7 };
         // boolean visi[] = new boolean[coins.length];
         // System.out.println(finitePermutation_subseq(coins, 12, "", 0));
         // System.out.println(finitePermutations(coins,12,"",visi));
-        System.out.println(InfinitePermutation_subseq(coins, 12, "", 0));
-        // System.out.println(infiPermutations(coins, 12, "") );
+        // System.out.println(InfinitePermutation_subseq(coins, 12, "", 0));
+        System.out.println(finiteCombination(coins, 10, "",0) );
     }
 
 }
