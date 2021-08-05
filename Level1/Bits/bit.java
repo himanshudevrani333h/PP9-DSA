@@ -74,14 +74,14 @@ public class bit {
     }
 
     // 136
-    public int singleNumber(int[] nums) {
+    // public int singleNumber(int[] nums) {
 
-        int ans = 0;
-        for (int ele : nums)
-            ans ^= ele;
-        return ans;
+    // int ans = 0;
+    // for (int ele : nums)
+    // ans ^= ele;
+    // return ans;
 
-    }
+    // }
 
     // 338
     public int[] countBits(int n) {
@@ -110,31 +110,31 @@ public class bit {
         return ans ^ i;
     }
 
-    public int missingNumber(int[] nums) {
-        int ans = 0, n = nums.length;
-        for (int ele : nums) {
-            ans += ele;
-        }
+    // public int missingNumber(int[] nums) {
+    // int ans = 0, n = nums.length;
+    // for (int ele : nums) {
+    // ans += ele;
+    // }
 
-        return ((n * (n + 1)) / 2) - ans;
-    }
+    // return ((n * (n + 1)) / 2) - ans;
+    // }
 
     // 260
-    public int[] singleNumber(int[] nums) {
-        int xor = 0;
-        for (int ele : nums)
-            xor ^= ele;
-        int xor_mask = xor & (-xor);
+    // public int[] singleNumber(int[] nums) {
+    // int xor = 0;
+    // for (int ele : nums)
+    // xor ^= ele;
+    // int xor_mask = xor & (-xor);
 
-        int A = 0, B = 0;
-        for (int ele : nums)
-            if ((ele & xor_mask) == 0)
-                A ^= ele;
-            else
-                B ^= ele;
+    // int A = 0, B = 0;
+    // for (int ele : nums)
+    // if ((ele & xor_mask) == 0)
+    // A ^= ele;
+    // else
+    // B ^= ele;
 
-        return new int[] { A, B };
-    }
+    // return new int[] { A, B };
+    // }
 
     // 137
     public int singleNumber(int[] nums) {
@@ -154,11 +154,33 @@ public class bit {
         return ans;
     }
 
+    public static int reverseBits(int n) {
+
+        int num = 0;
+        int idx = 0;
+
+        while (idx < 32) {
+            int lsb = (n & 1);
+            n >>>= 1;
+
+            num = num | ((lsb) << (31 - idx));
+            idx++;
+        }
+
+        // int num = 0;
+        // for(int i=0; i<32; i++){
+        // num|= ((n>>i &1)<<31-i);
+
+        // }
+        return num;
+    }
+
     public static void main(String[] args) {
 
         // System.out.println( OffToOn(1,1));
         // System.out.println(OnToOff(5, 2));
-        int a = (1 << 30);
-        System.out.println((a << 1));
+        // int a = (1 << 31);
+        // System.out.println((a));
+        System.out.println(reverseBits(43261596));
     }
 }
