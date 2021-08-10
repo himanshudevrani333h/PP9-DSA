@@ -19,6 +19,7 @@ class basic2{
     // }else{
     //     return false;
     // }
+    
     // for printing only prime no existing bw low and high no
     for( int i = m; i<=n; i++)
     {

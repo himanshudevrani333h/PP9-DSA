@@ -25,7 +25,7 @@ public class countsort {
         int minval = (int) 1e9;
         int maxval = -(int) 1e9;
         for (int e : arr) {
-            maxval = Math.max(minval, e);
+            maxval = Math.max(maxval, e);
             minval = Math.min(minval, e);
         }
 
