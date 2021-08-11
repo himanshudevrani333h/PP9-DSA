@@ -210,14 +210,14 @@ public class sudoku {
     public static void equalSet(int[] arr, int idx, int sum, ArrayList<ArrayList<Integer>> ans,
             ArrayList<Integer> smallAns) {
         if (idx >= arr.length)
-            return ;
+            return;
 
         int tempsum = 0;
         for (int e : smallAns)
             tempsum += e;
 
         if (tempsum > sum)
-            return ;
+            return;
 
         if (tempsum == sum) {
             ArrayList<Integer> set1 = new ArrayList<>(smallAns);
@@ -247,9 +247,8 @@ public class sudoku {
         smallAns.remove(smallAns.size() - 1);
 
         if (arr[idx] != leader)
-           equalSet(arr, idx + 1, sum, ans, smallAns);
+            equalSet(arr, idx + 1, sum, ans, smallAns);
 
-        
     }
 
     public static void equalSet(int[] arr, int idx) {
@@ -267,6 +266,65 @@ public class sudoku {
         ArrayList<Integer> smallAns = new ArrayList<>();
         equalSet(arr, 0, sum / 2, ans, smallAns);
         System.out.println(ans);
+    }
+
+    public static void ksubset(int[] arr, int idx, int[] subsetSum, ArrayList<ArrayList<Integer>> ans) {
+        if (idx == arr.length) {
+            int comp = subsetSum[0];
+
+            for (int i = 1; i < subsetSum.length; i++)
+                if (comp != subsetSum[i])
+                    return;
+
+            for (ArrayList<Integer> res : ans) {
+                System.out.print(res + " ");
+            }
+            System.out.println();
+
+            return;
+        }
+
+        for (int k = 0; k < subsetSum.length; k++) {
+            ArrayList<Integer> set = ans.get(k);
+            set.add(arr[idx]);
+            subsetSum[k] += arr[idx];
+
+            ksubset(arr, idx + 1, subsetSum, ans);
+
+            subsetSum[k] -= arr[idx];
+            set.remove(set.size() - 1);
+            if (set.size() == 0)
+                break;
+        }
+
+    }
+
+    static int count = 1;
+
+    public static void k_partitions(int i, int n, int k, ArrayList<ArrayList<Integer>> ans) {
+        if (i > n) {
+
+            if (ans.get(ans.size() - 1).size() == 0)
+                return;
+
+            System.out.print(count + ". ");
+            count++;
+            for (ArrayList<Integer> res : ans) {
+                System.out.print(res + " ");
+            }
+            System.out.println();
+            return;
+        }
+
+        for (int j = 0; j < k; j++) {
+            ArrayList<Integer> temp = ans.get(j);
+            temp.add(i);
+            k_partitions(i + 1, n, k, ans);
+            temp.remove(temp.size() - 1);
+            if (temp.size() == 0)
+                break;
+        }
+
     }
 
     public static void main(String[] args) {
