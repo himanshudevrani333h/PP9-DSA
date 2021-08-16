@@ -102,9 +102,9 @@ public class coins {
         }
         int count = 0;
         if (targ - coins[idx] >= 0)
-            count += finiteCombination_subseq(coins, targ - coins[idx], asf + coins[idx], 0);
+            count += InfiniteCombination_subseq(coins, targ - coins[idx], asf + coins[idx], 0);
 
-        count += finiteCombination_subseq(coins, targ, asf, idx + 1);
+        count += InfiniteCombination_subseq(coins, targ, asf, idx + 1);
 
         return count;
     }
