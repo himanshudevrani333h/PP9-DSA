@@ -141,6 +141,27 @@ public class LinkedList {
         rnode.next = null;
         return head;
     }
+    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1 == null || l2 == null ) return l1 != null ? l1 :l2;
+        ListNode dummyNode = new ListNode(-1);
+        ListNode res = dummyNode;
+        while( l1 != null && l2 != null){
+            
+            if(  l1.val < l2.val){
+                res.next = l1;
+                l1 = l1.next;
+            }else {
+                res.next = l2;
+                l2 = l2.next;
+            }
+            
+            res = res.next;
+        }
+        
+       res.next = l1 != null? l1 : l2;
+        
+        return dummyNode.next;
+    }
 
     public static ListNode segregateEvenOdd(ListNode head) {
         if (head == null || head.next == null)
@@ -222,6 +243,142 @@ public class LinkedList {
 
         return zero.next;
     }
+
+    public static ListNode mergeSort(ListNode head) {
+        
+        if( head == null){
+         return head;
+        }
+
+         ListNode temp = head;
+         ListNode midNode = midNode(temp);
+         ListNode righthalf = midNode.next;
+         midNode.next = null;
+         ListNode leftHalf = mergeSort(temp);
+         ListNode rightHalf = mergeSort(righthalf);
+
+         ListNode res = mergeTwoLists(leftHalf, rightHalf);
+
+         return res;
+    }
+
+    public static ListNode mergeKLists(ListNode[] lists, int si, int ei) {
+        
+        if( si == ei)  return lists[si];
+        
+        int mid = (si+ei)/2;
+        
+        ListNode leftlist = mergeKLists(lists,si,mid);
+        ListNode rightlist = mergeKLists(lists,mid+1,ei);
+        
+        return (mergeTwoLists(leftlist,rightlist));
+        
+    }
+    
+    private static ListNode th = null, tt = null;
+    
+    public static void addFirst(ListNode node){
+        if(th == null){
+            th = tt = node;
+        }else{
+            node.next = th;
+            th = node;
+        }
+    }
+
+    public static int length(ListNode node){
+        ListNode curr = node;
+        int len =0;
+        while( curr != null){
+            curr = curr.next;
+            len++;
+        }
+        return len;
+    }
+
+    public static ListNode reverseInKGroup(ListNode head, int k) {
+       if( head == null || head.next == null || k<=1) return head;
+       
+       int len = length(head);
+       ListNode curr = head, oh = null, ot = null;
+
+       while( len >= k){
+          int tempK = k;
+
+          while( tempK -->0){
+              ListNode fwd = curr.next;
+              curr.next = null;
+              addFirst(curr);
+              curr = fwd;
+          }
+
+          if(oh == null){
+              oh = th;
+              ot = tt;
+          }else{
+              ot.next = th;
+              ot = tt;
+          }
+
+          th = tt = null;
+          len -= k;
+       }
+
+       ot.next = curr;
+       return oh;
+    }
+
+
+    public static ListNode reverseInRange(ListNode head, int n, int m) {
+        if( head == null || head.next == null || n == m) return head;
+        ListNode dummy = new ListNode(-1), prev = dummy, curr = head;
+        prev.next = head;
+        
+        int i =1;
+        while( i<=n){
+            
+            while( i>= n && i<=m){
+                ListNode fwd = curr.next;
+                curr.next = null;
+                addFirst(curr);
+                curr = fwd;
+                
+                i++;
+            }
+            
+            if( i>m){
+                prev.next = th;
+                tt.next = curr;
+                break;
+            }
+            
+            prev = curr;
+            curr = curr.next;
+            i++;
+        }
+        
+        return dummy.next;
+    }
+
+    public static ListNode removeDuplicates(ListNode head) {
+        if( head == null || head.next == null) return head;
+        
+        ListNode dummy = new ListNode(-1), prev = dummy, curr = head;
+        
+        while( curr != null){
+            if(curr.val == prev.val){
+               curr = curr.next;
+            }else{
+                ListNode fwd = curr.next;
+                 prev.next = curr;
+                 curr.next = null;
+                 curr = fwd;
+                 prev = prev.next;
+            }
+        }
+        
+        return dummy.next;
+     }
 
     public static void main(String[] args) {
 
