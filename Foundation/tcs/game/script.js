@@ -49,12 +49,12 @@ btn.addEventListener("click", function (e) {
             ans.classList.add("ans");
             let str = "";
             if (entered_number > number_generator) {
-                str = "Your guess is more";
+                str = "Your guess is High";
                 ans.innerText = str;
                 console.log(ans.innerText);
                 div.append(ans);
             } else if (entered_number < number_generator) {
-                str = "Your guess is less";
+                str = "Your guess is Low";
                 ans.innerText = str;
                 console.log(ans.innerText);
                 div.append(ans);
