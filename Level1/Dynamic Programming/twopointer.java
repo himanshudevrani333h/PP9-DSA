@@ -528,6 +528,80 @@ class twopointer {
         System.out.println(minpath);
     }
 
+    public long countfrnds(int n, long dp[]) {
+        if (n == 0) {
+            return dp[n] = 1;
+        }
+
+        if (dp[n] != -1)
+            return dp[n];
+        long s = countfrnds(n - 1, dp);
+
+        long p = n - 2 >= 0 ? countfrnds(n - 2, dp) * (n - 1) : 0;
+
+        return dp[n] = (s + p % mod) % mod;
+    }
+
+    public long countfrndsptr(int n) {
+        long a = 1, b = 1;
+        for (int i = 2; i <= n; i++) {
+
+            long sum = (b + a * (i - 1) % mod) % mod;
+
+            a = b;
+            b = sum % mod;
+
+        }
+
+        return b;
+    }
+
+    public long countFriendsPairings(int n) {
+        long dp[] = new long[n + 1];
+        Arrays.fill(dp, -1);
+        long res = countfrnds(n, dp);
+        return countfrndsptr(n);
+
+    }
+
+    public static int divideinKgroups(int n, int k, int dp[][]){
+        if( n== k || k == 1){
+            return dp[n][k] = 1;
+        }
+
+        if( dp[n][k] != 0) return dp[n][k];
+        int sgroup = divideinKgroups(n-1, k-1, dp);
+        int pgroup = divideinKgroups(n-1, k, dp) * k;
+
+        return dp[n][k] = sgroup + pgroup;
+    }
+    
+    public static int divideinKgroupstabu(int N, int K, int dp[][]){
+        for(int n =1; n<=N; n++){
+            for( int k =1; k<=K; k++){
+                if( n== k || k == 1){
+                    dp[n][k] = 1;
+                    continue;
+                }
+        
+                
+                int sgroup = dp[n-1][k-1]; //divideinKgroups(n-1, k-1, dp);
+                int pgroup = dp[n-1][k]; //divideinKgroups(n-1, k, dp) * k;
+        
+               dp[n][k] = sgroup + pgroup;
+            }
+        }
+
+        return dp[N][K];
+       
+    }
+    
+    public static int divideinKgroups(){
+        int n = 10;
+        int k = 5;
+        int dp[][] = new int[n+1][k+1];
+        return divideinKgroups(n,k,dp);
+    }
     public static void main(String[] args) {
         int n = 7;
         // int[] dp = new int[n + 1];
