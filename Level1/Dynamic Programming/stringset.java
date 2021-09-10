@@ -1,4 +1,4 @@
-import java.rmi.Remote;
+
 import java.util.Arrays;
 
 class stringset {
@@ -119,6 +119,11 @@ class stringset {
         return lcss(text1, text2, text1.length(), text2.length(), dp);
     }
 
+    // leetcode 583.
+    public int minDistance(String word1, String word2) {
+        return word1.length() + word2.length() - 2 * longestCommonSubsequence(word1, word2);
+    }
+
     // 115 Distinct Subsequence
 
     public int numDistinct(String s, String t, int i, int j, int dp[][]) {
@@ -218,7 +223,7 @@ class stringset {
         return dp[N][M];
     }
 
-    public int minDistance(String word1, String word2) {
+    public int EditDistance(String word1, String word2) {
         int dp[][] = new int[word1.length() + 1][word2.length() + 1];
         for (int[] d : dp)
             Arrays.fill(d, -1);
@@ -288,6 +293,156 @@ class stringset {
 
         return ans == 1;
     }
+
+    // leetcode 1035
+    public int maxUncrossedLines(int[] num1, int[] num2, int dp[][], int N, int M) {
+
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+
+                if (n == 0 || m == 0) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+
+                if (num1[n - 1] == num2[m - 1]) {
+                    dp[n][m] = dp[n - 1][m - 1] + 1;
+                } else
+                    dp[n][m] = Math.max(dp[n - 1][m], dp[n][m - 1]);
+
+            }
+        }
+
+        return dp[N][M];
+    }
+
+    public int maxUncrossedLines(int[] num1, int[] num2) {
+        int n = num1.length, m = num2.length;
+        int dp[][] = new int[n + 1][m + 1];
+        return maxUncrossedLines(num1, num2, dp, n, m);
+
+    }
+
+    // leetcode 1458
+    public int maximum(int... arr) {
+        int max = arr[0];
+        for (int e : arr)
+            max = Math.max(max, e);
+        return max;
+    }
+
+    public int maxDotProduct(int[] num1, int[] num2, int dp[][], int n, int m) {
+
+        if (n == 0 || m == 0) {
+            return dp[n][m] = -(int) 1e9;
+        }
+
+        if (dp[n][m] != -(int) 1e9)
+            return dp[n][m];
+
+        int val = num1[n - 1] * num2[m - 1];
+        int bothnumbers = maxDotProduct(num1, num2, dp, n - 1, m - 1) + val;
+        int num1accept = maxDotProduct(num1, num2, dp, n - 1, m);
+        int num2accept = maxDotProduct(num1, num2, dp, n, m - 1);
+
+        return dp[n][m] = maximum(val, bothnumbers, num1accept, num2accept);
+    }
+
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        int dp[][] = new int[n + 1][m + 1];
+        for (int d[] : dp)
+            Arrays.fill(d, -(int) 1e9);
+        return maxDotProduct(nums1, nums2, dp, n, m);
+    }
+
+    // Leetcode 5
+    public String longestPalindrome(String s) {
+        int n = s.length();
+        boolean dp[][] = new boolean[n][n];
+        int count = 0, maxlen = 0, si = 0;
+
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0)
+                    dp[i][j] = true;
+                else if (gap == 1 && s.charAt(i) == s.charAt(j))
+                    dp[i][j] = true;
+                else
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+
+                if (dp[i][j]) {
+                    count++;
+                    if (j - i + 1 > maxlen) {
+                        maxlen = j - i + 1;
+                        si = i;
+                    }
+                }
+            }
+        }
+
+        return s.substring(si, si + maxlen);
+    }
+
+    // Leetcode 132
+    public int mincut(String s, int si, int ei, boolean pdp[][], int dp[]) {
+
+        if (pdp[si][ei])
+            return 0;
+
+        if (dp[si] != -1)
+            return dp[si];
+        int mincut = (int) 1e8;
+        for (int cut = si; cut <= ei; cut++) {
+            if (pdp[si][cut]) {
+                mincut = Math.min(mincut, mincut(s, cut + 1, ei, pdp, dp) + 1);
+            }
+        }
+
+        return dp[si] = mincut;
+    }
+
+    public int minCut(String s) {
+        int n = s.length();
+        boolean pdp[][] = new boolean[n][n];
+
+        for (int gap = 0; gap < n; gap++)
+            for (int i = 0, j = gap; j < n; j++, i++) {
+                if (gap == 0)
+                    pdp[i][j] = true;
+                else if (gap == 1 && s.charAt(i) == s.charAt(j))
+                    pdp[i][j] = true;
+                else
+                    pdp[i][j] = s.charAt(i) == s.charAt(j) && pdp[i + 1][j - 1];
+            }
+
+        int dp[] = new int[n + 1];
+        Arrays.fill(dp, -1);
+
+        int ans = mincut(s, 0, n - 1, pdp, dp);
+        for (int a : dp)
+            System.out.print(a + " ");
+        return ans;
+    }
+
+    // Count subsequences of type a^i, b^j, c^k GFG
+    // https://practice.geeksforgeeks.org/problems/count-subsequences-of-type-ai-bj-ck4425/1#
+    public int CountSubSeq(String s) {
+        long emptyCount = 1, aCount = 0, bCount = 0, cCount = 0, mod = (long) 1e9 + 7;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == 'c') {
+                cCount = cCount + (bCount + cCount) % mod;
+            } else if (s.charAt(i) == 'b') {
+                bCount = bCount + (aCount + bCount) % mod;
+            } else if (s.charAt(i) == 'a') {
+                aCount = aCount + (emptyCount + aCount) % mod;
+            }
+        }
+
+        return (int) (cCount % mod);
+    }
+
     public static void main(String[] args) {
         // System.out.println(removeStars("****a*b**"));
     }
