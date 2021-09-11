@@ -1,6 +1,7 @@
 
 import java.util.Arrays;
-
+import java.util.HashSet;
+import java.util.List;
 class stringset {
 
     public static void display(int[] dp) {
@@ -385,6 +386,7 @@ class stringset {
     }
 
     // Leetcode 132
+    // faafaaaaabaageeg <- test case
     public int mincut(String s, int si, int ei, boolean pdp[][], int dp[]) {
 
         if (pdp[si][ei])
@@ -427,6 +429,7 @@ class stringset {
 
     // Count subsequences of type a^i, b^j, c^k GFG
     // https://practice.geeksforgeeks.org/problems/count-subsequences-of-type-ai-bj-ck4425/1#
+    // follow up question ai,bj,ck,dl,em....
     public int CountSubSeq(String s) {
         long emptyCount = 1, aCount = 0, bCount = 0, cCount = 0, mod = (long) 1e9 + 7;
 
@@ -442,7 +445,28 @@ class stringset {
 
         return (int) (cCount % mod);
     }
-
+    // leetcode 139 Word Break
+    public boolean wordBreak(String s, List<String> wordDict) {
+         int n = s.length(),len = 0;
+        boolean dp [] = new boolean[n+1];
+        HashSet<String> set = new HashSet<>();
+        for(String str : wordDict){
+            set.add(str);
+            len = Math.max(str.length(),len);
+        }
+        dp[0] = true;
+        for(int i = 0; i<= n; i++){
+            if(!dp[i]) continue;
+            for( int l= 1; l<=len && i+l<=n; l++){
+                String substr = s.substring(i,i+l);
+                if(set.contains(substr)){
+                    dp[i+l] = true;
+                }
+            }
+        }
+        
+        return dp[n];
+    }
     public static void main(String[] args) {
         // System.out.println(removeStars("****a*b**"));
     }
