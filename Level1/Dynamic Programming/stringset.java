@@ -1,6 +1,7 @@
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 class stringset {
 
@@ -224,6 +225,25 @@ class stringset {
         return dp[N][M];
     }
 
+    // cost : {insert = a, replace = b, delete = c}
+    public int minDistance_02(String word1, String word2, int n, int m, int[] cost, int[][] dp) {
+        if (n == 0 || m == 0) {
+            return dp[n][m] = (n == 0 ? m * cost[0] : n * cost[2]);
+        }
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        int insert = minDistance_02(word1, word2, n, m - 1, cost, dp);
+        int delete = minDistance_02(word1, word2, n - 1, m, cost, dp);
+        int replace = minDistance_02(word1, word2, n - 1, m - 1, cost, dp);
+
+        if (word1.charAt(n - 1) == word2.charAt(m - 1))
+            return dp[n][m] = replace;
+        else
+            return dp[n][m] = Math.min(Math.min(insert + cost[0], delete + cost[2]), replace + cost[1]);
+    }
+
     public int EditDistance(String word1, String word2) {
         int dp[][] = new int[word1.length() + 1][word2.length() + 1];
         for (int[] d : dp)
@@ -445,30 +465,147 @@ class stringset {
 
         return (int) (cCount % mod);
     }
+
     // leetcode 139 Word Break
     public boolean wordBreak(String s, List<String> wordDict) {
-         int n = s.length(),len = 0;
-        boolean dp [] = new boolean[n+1];
+        int n = s.length(), len = 0;
+        boolean dp[] = new boolean[n + 1];
         HashSet<String> set = new HashSet<>();
-        for(String str : wordDict){
+        for (String str : wordDict) {
             set.add(str);
-            len = Math.max(str.length(),len);
+            len = Math.max(str.length(), len);
         }
         dp[0] = true;
-        for(int i = 0; i<= n; i++){
-            if(!dp[i]) continue;
-            for( int l= 1; l<=len && i+l<=n; l++){
-                String substr = s.substring(i,i+l);
-                if(set.contains(substr)){
-                    dp[i+l] = true;
+        for (int i = 0; i <= n; i++) {
+            if (!dp[i])
+                continue;
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = s.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + l] = true;
                 }
             }
         }
-        
+
         return dp[n];
     }
+
+    // Longest Palindromic substring print via BACK_ENGINEERING;
+
+    public String lpss_backEng(String str, int si, int ei, int dp[][]) {
+
+        if (si >= ei) {
+            return si == ei ? str.charAt(si) + "" : "";
+        }
+
+        if (str.charAt(si) == str.charAt(ei)) {
+            return str.charAt(si) + lpss_backEng(str, si + 1, ei - 1, dp) + str.charAt(ei);
+        } else if (dp[si + 1][ei] > dp[si][ei - 1]) {
+            return lpss_backEng(str, si + 1, ei, dp);
+        } else {
+            return lpss_backEng(str, si, ei - 1, dp);
+        }
+    }
+
+    public void wordBreak_backEngg(String s, int idx, boolean[] dp, int maxLen, List<String> wordDict,
+            HashSet<String> set, String ssf, List<String> ans) {
+        if (idx >= s.length()) {
+            ans.add(ssf.substring(0, ssf.length() - 1));
+            return;
+        }
+
+        for (int l = 1; l <= maxLen && idx + l <= s.length(); l++) {
+            if (dp[idx + l]) {
+                String substr = s.substring(idx, idx + l);
+                if (set.contains(substr)) {
+                    wordBreak_backEngg(s, idx + l, dp, maxLen, wordDict, set, ssf + substr + " ", ans);
+                }
+            }
+        }
+    }
+
+    // leetcode 140
+    public List<String> Word_Break_II(String s, List<String> wordDict) {
+        HashSet<String> set = new HashSet<>();
+        int len = 0, n = s.length();
+        for (String ss : wordDict) {
+            set.add(ss);
+            len = Math.max(ss.length(), len);
+        }
+
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true;
+        for (int i = 0; i <= n; i++) {
+            if (!dp[i])
+                continue;
+
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = s.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + l] = true;
+                }
+            }
+        }
+
+        List<String> ans = new ArrayList<>();
+        if (dp[n])
+            wordBreak_backEngg(s, 0, dp, len, wordDict, set, "", ans);
+
+        return ans;
+    }
+    // // Raaju baandar question
+    // public static void pattern(int n){
+    // int sNum = 1;
+    // int eNum = n;
+    // boolean even = n %2 == 0;
+    // int mid = (n +1) /2;
+
+    // for( int i = 1; i<=n; i++){
+
+    // for( int j = sNum; j<=eNum; j++){
+    // if( i == 1 || i == n)
+    // System.out.print(j+" ");
+    // else if( i > 1 && i< n && j > sNum && j<eNum){
+    // System.out.print("* ");
+    // }else if(j==sNum || j == eNum){
+    // System.out.print(j+" ");
+    // }
+    // sNum = j;
+    // }
+    // System.out.println();
+    // if(even){
+    // if( i < mid){
+    // sNum = sNum + (n +1);
+    // eNum = sNum + (n-1);
+    // }
+    // else if( i == mid) {
+    // eNum = sNum + n;
+    // sNum = eNum - (n-1);
+    // }else{
+    // eNum = sNum - 2*n;
+    // sNum = eNum - (n-1);
+    // }
+
+    // }else{
+    // if( i < mid){
+    // sNum = sNum + (n +1);
+    // eNum = sNum + (n-1);
+    // }
+    // else if( i == mid) {
+    // eNum = sNum - n;
+    // sNum = eNum - (n-1);
+    // }else{
+    // eNum = sNum - 2*n;
+    // sNum = eNum - (n-1);
+    // }
+
+    // }
+    // }
+    // }
+
     public static void main(String[] args) {
         // System.out.println(removeStars("****a*b**"));
+        // pattern(8);
     }
 
 }
