@@ -206,6 +206,56 @@ public class TargetSet {
         return knapSack(W, wt, val, N, dp);
     }
 
+    // leetcode 416
+    public boolean canPartition(int[] nums) {
+        int sum = 0, n = nums.length;
+        for (int ele : nums)
+            sum += ele;
+
+        if (sum % 2 != 0)
+            return false;
+
+        sum /= 2;
+
+        boolean dp[][] = new boolean[n + 1][sum + 1];
+
+        return targetSum_DP(nums, n, sum, dp);
+    }
+
+    // Leetcode 576. Out of Boundary Paths
+    int mod = (int) 1e9 + 7;
+
+    public int findPath(int m, int n, int maxMove, int sr, int sc, int dp[][][]) {
+
+        if (sr >= m || sc >= n || sr < 0 || sc < 0 || maxMove == 0) {
+            if (sr >= m || sc >= n || sr < 0 || sc < 0) {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        int count = 0;
+        if (dp[sr][sc][maxMove] >= 0)
+            return dp[sr][sc][maxMove];
+        count += (findPath(m, n, maxMove - 1, sr + 1, sc, dp) + findPath(m, n, maxMove - 1, sr - 1, sc, dp)) % mod;
+
+        count += (findPath(m, n, maxMove - 1, sr, sc + 1, dp) + findPath(m, n, maxMove - 1, sr, sc - 1, dp)) % mod;
+
+        return dp[sr][sc][maxMove] = count % mod;
+
+    }
+
+    public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        int dp[][][] = new int[m][n][maxMove + 1];
+        for (int od[][] : dp)
+            for (int id[] : od)
+                Arrays.fill(id, -1);
+
+        return findPath(m, n, maxMove, startRow, startColumn, dp);
+
+    }
+
     public static void main(String[] args) {
         int coins[] = { 2, 3, 5, 7 };
         int targ = 10;
