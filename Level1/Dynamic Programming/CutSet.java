@@ -180,6 +180,70 @@ class CutSet {
         return maxCoins(nums, 0, n - 1, dp);
     }
 
+    // Boolean Parenthesization <-GFG
+
+    static class pairBoolean {
+        long totalTrue = 0;
+        long totalFalse = 0;
+
+        pairBoolean() {
+        };
+
+        public pairBoolean(long totalTrue, long totalFalse) {
+            this.totalTrue = totalTrue;
+            this.totalFalse = totalFalse;
+        }
+    }
+
+    static void evaluateTotalTF(pairBoolean leftWays, pairBoolean rightWays, pairBoolean res, char operator) {
+        long mod = 1003;
+        long totalTF = ((leftWays.totalTrue + leftWays.totalFalse) * (rightWays.totalTrue + rightWays.totalFalse))
+                % mod;
+        long totalFalse = 0, totalTrue = 0;
+        if (operator == '|') {
+            totalFalse = (leftWays.totalFalse * rightWays.totalFalse) % mod;
+            totalTrue = (totalTF - totalFalse + mod) % mod;
+        } else if (operator == '&') {
+            totalTrue = (leftWays.totalTrue * rightWays.totalTrue) % mod;
+            totalFalse = (totalTF - totalTrue + mod) % mod;
+        } else if (operator == '^') {
+            totalTrue = (leftWays.totalTrue * rightWays.totalFalse) % mod
+                    + (leftWays.totalFalse * rightWays.totalTrue) % mod;
+            totalFalse = (totalTF - totalTrue + mod) % mod;
+        }
+
+        res.totalFalse = (res.totalFalse + totalFalse) % mod;
+        res.totalTrue = (res.totalTrue + totalTrue) % mod;
+
+    }
+
+    static pairBoolean countWays(String s, int si, int ei, pairBoolean dp[][]) {
+
+        if (si == ei) {
+            char ch = s.charAt(si);
+            int t = ch == 'T' ? 1 : 0;
+            int f = ch == 'F' ? 1 : 0;
+
+            return dp[si][ei] = new pairBoolean(t, f);
+        }
+
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+        pairBoolean res = new pairBoolean();
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            pairBoolean leftWays = countWays(s, si, cut - 1, dp);
+            pairBoolean rightWays = countWays(s, cut + 1, ei, dp);
+
+            evaluateTotalTF(leftWays, rightWays, res, s.charAt(cut));
+        }
+        return dp[si][ei] = res;
+    }
+
+    static int countWays(int N, String S) {
+        pairBoolean dp[][] = new pairBoolean[N][N];
+        return (int) countWays(S, 0, N - 1, dp).totalTrue;
+    }
+
     public static void main(String[] args) {
         // int arr[] = { 40, 20, 30, 10, 30 };
         // System.out.println(matrixMultiplication(5, arr));
