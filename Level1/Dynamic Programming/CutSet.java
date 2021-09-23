@@ -51,6 +51,39 @@ class CutSet {
             return dp[SI][EI];
     }
 
+    public static int matrixMul_tabu_path(int[] arr, int SI, int EI, int[][] dp) {
+        int n = arr.length;
+        String[][] sdp = new String[n][n];
+
+        for (int gap = 1; gap < n; gap++) {
+            for (int si = 0, ei = gap; ei < n; si++, ei++) {
+                if (ei - si == 1) {
+                    dp[si][ei] = 0;
+                    sdp[si][ei] = (char) (si + 'A') + "";
+                    continue;
+                }
+
+                int minRes = (int) 1e9;
+                String minStr = "";
+                for (int cut = si + 1; cut < ei; cut++) {
+                    int leftRes = dp[si][cut];
+                    int rightRes = dp[cut][ei];
+
+                    if (leftRes + arr[si] * arr[cut] * arr[ei] + rightRes < minRes) {
+                        minRes = leftRes + arr[si] * arr[cut] * arr[ei] + rightRes;
+                        minStr = "(" + sdp[si][cut] + sdp[cut][ei] + ")";
+                    }
+                }
+
+                dp[si][ei] = minRes;
+                sdp[si][ei] = minStr;
+            }
+
+        }
+        System.out.println(sdp[SI][EI]);
+        return dp[SI][EI];
+    }
+
     static int matrixMultiplication(int N, int arr[]) {
         int dp[][] = new int[N + 1][N + 1];
         // for (int d[] : dp)
@@ -66,8 +99,61 @@ class CutSet {
         return res;
     }
 
+    // Minimum and Maximum values of an expression with * and +  <- GFG
+
+    static  class pairMM{
+     int min = (int)1e9;
+     int max = 0;
+     pairMM(){
+         
+     };
+
+     pairMM(int val){
+         this.min= this.max = val;
+     }
+    }
+
+    public static pairMM evaluate(pairMM leftRes, pairMM rightRes, char operator){
+       pairMM res = new pairMM();
+       if(operator == '+'){
+         res.min = leftRes.min + rightRes.min;
+         res.max = leftRes.max + rightRes.max;
+       }else if( operator == '*'){
+        res.min = leftRes.min * rightRes.min;
+        res.max = leftRes.max * rightRes.max;
+       }
+       return res;
+    }
+    public static pairMM mmValueOfExpression(String str, int si, int ei, pairMM dp[][]){
+        if( si == ei){
+            return dp[si][ei] = new pairMM(str.charAt(ei)- '0');
+        }
+
+        if(dp[si][ei] != null) return dp[si][ei];
+        pairMM myRes = new pairMM();
+        for( int cut = si+1; cut<ei; cut +=2){
+            pairMM leftRes = mmValueOfExpression(str, si, cut-1, dp);
+            pairMM rightRes = mmValueOfExpression(str, cut+1, ei, dp);
+            pairMM evalRes = evaluate(leftRes,rightRes,str.charAt(cut));
+
+            myRes.min = Math.min(myRes.min,evalRes.min);
+            myRes.max = Math.max(myRes.max,evalRes.max);
+        }
+
+        return dp[si][ei] = myRes;
+    }
+    public static void mmValueOfExpression(){
+      String str = "1+2*3+4*5";
+      int n = str.length();
+      pairMM dp[][] = new pairMM[n][n];
+      pairMM res = mmValueOfExpression(str, 0, n-1, dp);
+      System.out.println("Min val : " + res.min);
+      System.out.println("Max val : " + res.max);
+    }
     public static void main(String[] args) {
-        int arr[] = { 40, 20, 30, 10, 30 };
-        System.out.println(matrixMultiplication(5, arr));
+        // int arr[] = { 40, 20, 30, 10, 30 };
+        // System.out.println(matrixMultiplication(5, arr));
+
+        mmValueOfExpression();
     }
 }
