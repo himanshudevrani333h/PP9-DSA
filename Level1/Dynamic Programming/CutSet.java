@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.*;
 
 class CutSet {
 
@@ -244,41 +245,150 @@ class CutSet {
         return (int) countWays(S, 0, N - 1, dp).totalTrue;
     }
 
+    // gfg OPTIMAL BINARY TREE
+    public static int obst(int[] val, int[] freq, int si, int ei, int[][] dp) {
+        if (dp[si][ei] != 0)
+            return dp[si][ei];
+        int minCost = (int) 1e8;
 
+        int sum = 0;
 
+        for (int i = si; i <= ei; i++)
+            sum += freq[i];
 
+        for (int cut = si; cut <= ei; cut++) {
+            int lres = cut == si ? 0 : obst(val, freq, si, cut - 1, dp);
+            int rres = cut == ei ? 0 : obst(val, freq, cut + 1, ei, dp);
+            // sum += freq[cut];
+            minCost = Math.min(minCost, lres + sum + rres); // sum : sumOfRange(freq, si,ei);
+        }
 
-    // Leetcode  1039
-    public int minScoreTriangulation(int [] arr, int si, int ei, int dp[][]){
-       
-        if( ei - si < 2 ){
+        return dp[si][ei] = minCost; // minCost + sum
+    }
+
+    // Leetcode 1039
+    public int minScoreTriangulation(int[] arr, int si, int ei, int dp[][]) {
+
+        if (ei - si < 2) {
             return 0;
         }
-        
-        if( dp[si][ei] != 0) return dp[si][ei];
-        
-       int minimumScore = (int)1e9;
-        for(int cut = si +1; cut<ei; cut++){
-            
+
+        if (dp[si][ei] != 0)
+            return dp[si][ei];
+
+        int minimumScore = (int) 1e9;
+        for (int cut = si + 1; cut < ei; cut++) {
+
             int middletriangle = arr[si] * arr[ei] * arr[cut];
-            
-            int leftScore =minScoreTriangulation(arr,si,cut,dp);
-            
-            int rightScore =  minScoreTriangulation(arr,cut,ei,dp);
-            
+
+            int leftScore = minScoreTriangulation(arr, si, cut, dp);
+
+            int rightScore = minScoreTriangulation(arr, cut, ei, dp);
+
             minimumScore = Math.min(leftScore + rightScore + middletriangle, minimumScore);
         }
-        
+
         return dp[si][ei] = minimumScore;
     }
-    
-    
+
     public int minScoreTriangulation(int[] values) {
-       int n = values.length;
-       int dp[][]= new int[n][n];
-       return minScoreTriangulation(values, 0, n-1, dp); 
+        int n = values.length;
+        int dp[][] = new int[n][n];
+        return minScoreTriangulation(values, 0, n - 1, dp);
     }
 
+    // leetcode 95
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    public void generateAlllBST(List<TreeNode> leftList, List<TreeNode> rightList, List<TreeNode> ans, int num) {
+        for (TreeNode ln : leftList) {
+            for (TreeNode rn : rightList) {
+                TreeNode root = new TreeNode(num);
+                root.left = ln;
+                root.right = rn;
+                ans.add(root);
+            }
+        }
+    }
+
+    public List<TreeNode> generateTrees(int si, int ei, List<TreeNode>[][] dp) {
+        List<TreeNode> myAns = new ArrayList<>();
+        if (si >= ei) {
+            TreeNode root = (si == ei ? new TreeNode(si) : null);
+            myAns.add(root);
+            return myAns;
+        }
+
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        for (int cut = si; cut <= ei; cut++) {
+            List<TreeNode> leftList = generateTrees(si, cut - 1, dp);
+            List<TreeNode> rightList = generateTrees(cut + 1, ei, dp);
+
+            generateAlllBST(leftList, rightList, myAns, cut);
+        }
+
+        return dp[si][ei] = myAns;
+    }
+
+    public List<TreeNode> generateTrees(int n) {
+        List<TreeNode>[][] dp = new ArrayList[n][n];
+        return generateTrees(1, n, dp);
+    }
+
+    // leetcode 576
+    int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+    int mod = (int) 1e9 + 7;
+
+    public int findPaths(int n, int m, int K, int sr, int sc, int[][][] dp) {
+        if (sr < 0 || sc < 0 || sr == n || sc == m) {
+            return 1;
+        }
+
+        if (K == 0)
+            return 0;
+
+        if (dp[sr][sc][K] != -1)
+            return dp[sr][sc][K];
+        int count = 0;
+
+        for (int[] d : dir) {
+            int r = sr + d[0];
+            int c = sc + d[1];
+
+            count = (count + findPaths(n, m, K - 1, r, c, dp)) % mod;
+
+        }
+
+        return dp[sr][sc][K] = count;
+    }
+
+    public int findPaths(int n, int m, int k, int r, int c) {
+        int[][][] dpp = new int[n + 1][m + 1][k + 1];
+        for (int[][] dp : dpp)
+            for (int[] d : dp)
+                Arrays.fill(d, -1);
+
+        return findPaths(n, m, k, r, c, dpp);
+    }
 
     public static void main(String[] args) {
         // int arr[] = { 40, 20, 30, 10, 30 };
