@@ -244,6 +244,42 @@ class CutSet {
         return (int) countWays(S, 0, N - 1, dp).totalTrue;
     }
 
+
+
+
+
+    // Leetcode  1039
+    public int minScoreTriangulation(int [] arr, int si, int ei, int dp[][]){
+       
+        if( ei - si < 2 ){
+            return 0;
+        }
+        
+        if( dp[si][ei] != 0) return dp[si][ei];
+        
+       int minimumScore = (int)1e9;
+        for(int cut = si +1; cut<ei; cut++){
+            
+            int middletriangle = arr[si] * arr[ei] * arr[cut];
+            
+            int leftScore =minScoreTriangulation(arr,si,cut,dp);
+            
+            int rightScore =  minScoreTriangulation(arr,cut,ei,dp);
+            
+            minimumScore = Math.min(leftScore + rightScore + middletriangle, minimumScore);
+        }
+        
+        return dp[si][ei] = minimumScore;
+    }
+    
+    
+    public int minScoreTriangulation(int[] values) {
+       int n = values.length;
+       int dp[][]= new int[n][n];
+       return minScoreTriangulation(values, 0, n-1, dp); 
+    }
+
+
     public static void main(String[] args) {
         // int arr[] = { 40, 20, 30, 10, 30 };
         // System.out.println(matrixMultiplication(5, arr));
