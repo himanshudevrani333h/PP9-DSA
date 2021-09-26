@@ -556,7 +556,7 @@ class stringset {
     }
 
     // Leetcode 10 <- Regular Expression matching
-    public String removeStars(String p) {
+    public String removeStarsRE(String p) {
         StringBuilder sb = new StringBuilder();
         sb.append(p.charAt(0));
         int i = 1;
@@ -573,7 +573,7 @@ class stringset {
         return sb.toString();
     }
 
-    public int isMatch(String s, String p, int n, int m, int[][] dp) {
+    public int isMatchRE(String s, String p, int n, int m, int[][] dp) {
 
         if (n == 0 && m == 0)
             return dp[n][m] = 1;
@@ -602,13 +602,42 @@ class stringset {
         }
     }
 
-    public boolean isMatch(String s, String p) {
+    public boolean isMatchRE(String s, String p) {
         int n = s.length(), m = removeStars(p).length();
         int dp[][] = new int[n + 1][m + 1];
         for (int d[] : dp)
             Arrays.fill(d, -1);
         return isMatch(s, p, n, m, dp) == 1;
     }
+
+    // 213. House Robber II
+    public int rob(int arr[], int si, int ei, int[] dp) {
+        if (si > ei)
+            return 0;
+        if (dp[si] != -1)
+            return dp[si];
+        int ifRob = arr[si] + rob(arr, si + 2, ei, dp);
+        int ifNotRob = rob(arr, si + 1, ei, dp);
+
+        return dp[si] = Math.max(ifRob, ifNotRob);
+    }
+
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n == 0 || n == 1)
+            return n == 1 ? nums[0] : 0;
+
+        int dp1[] = new int[n];
+        Arrays.fill(dp1, -1);
+
+        int dp2[] = new int[n];
+        Arrays.fill(dp2, -1);
+
+        return Math.max(rob(nums, 0, n - 2, dp1), rob(nums, 1, n - 1, dp2));
+    }
+
+
+    
     // // Raaju baandar question
     // public static void pattern(int n){
     // int sNum = 1;
