@@ -636,8 +636,29 @@ class stringset {
         return Math.max(rob(nums, 0, n - 2, dp1), rob(nums, 1, n - 1, dp2));
     }
 
+    // leetcode 198 -> House Robber I
+    public int robI(int arr[], int si, int ei, int[] dp) {
+        if (si > ei)
+            return 0;
+        if (dp[si] != -1)
+            return dp[si];
+        int ifRob = arr[si] + robI(arr, si + 2, ei, dp);
+        int ifNotRob = robI(arr, si + 1, ei, dp);
 
-    
+        return dp[si] = Math.max(ifRob, ifNotRob);
+    }
+
+    public int robI(int[] nums) {
+        int n = nums.length;
+        if (n == 0 || n == 1)
+            return n == 1 ? nums[0] : 0;
+
+        int dp[] = new int[n];
+        Arrays.fill(dp, -1);
+
+        return Math.max(rob(nums, 0, n - 1, dp), rob(nums, 1, n - 2, dp));
+    }
+
     // // Raaju baandar question
     // public static void pattern(int n){
     // int sNum = 1;
