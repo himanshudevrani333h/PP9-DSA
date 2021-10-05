@@ -170,6 +170,53 @@ public class NGE {
         return ans;
     }
 
+    // Leetcode 735. Asteroid Collision
+    public int[] asteroidCollision(int[] arr) {
+        int n = arr.length;
+        LinkedList<Integer> st = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+
+            if (arr[i] > 0) {
+                st.addFirst(i);
+                continue;
+            }
+
+            while (st.size() != 0 && arr[st.getFirst()] > 0 && arr[st.getFirst()] < -arr[i])
+                st.removeFirst();
+
+            if (st.size() != 0 && arr[st.getFirst()] == -arr[i])
+                st.removeFirst();
+            else if (st.size() == 0 || arr[st.getFirst()] < 0)
+                st.addFirst(i);
+        }
+
+        int ans[] = new int[st.size()];
+        int idx = ans.length - 1;
+
+        while (st.size() != 0) {
+            ans[idx--] = arr[st.removeFirst()];
+        }
+
+        return ans;
+    }
+
+    // Leetcode 946. Validate Stack Sequences
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        LinkedList<Integer> st = new LinkedList<>();
+        int idx = 0;
+        for (int i = 0; i < pushed.length; i++) {
+            st.addFirst(i);
+
+            while (st.size() != 0 && pushed[st.getFirst()] == popped[idx]) {
+                idx++;
+                st.removeFirst();
+            }
+
+        }
+
+        return st.size() == 0;
+    }
+
     public static void main(String[] args) {
         int arr[] = { 2, 1, 3, 1, 2, 4, 5, 9, 6 };
         int ans[] = NSEonRight(arr);
