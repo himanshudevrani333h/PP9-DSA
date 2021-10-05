@@ -149,6 +149,27 @@ public class NGE {
         return st.size() == 0;
     }
 
+    // leetcode 739. Daily Temperatures
+    public int[] dailyTemperatures(int[] arr) {
+        int n = arr.length;
+        LinkedList<Integer> st = new LinkedList<>();
+        st.addFirst(-1);
+        int ans[] = new int[n];
+        for (int i = n - 1; i >= 0; i--) {
+
+            while (st.getFirst() != -1 && arr[st.getFirst()] <= arr[i]) {
+                st.removeFirst();
+            }
+
+            if (st.getFirst() != -1)
+                ans[i] = st.getFirst() - i;
+
+            st.addFirst(i);
+        }
+
+        return ans;
+    }
+
     public static void main(String[] args) {
         int arr[] = { 2, 1, 3, 1, 2, 4, 5, 9, 6 };
         int ans[] = NSEonRight(arr);
