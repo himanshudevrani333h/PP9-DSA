@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class NGE {
 
@@ -215,6 +216,171 @@ public class NGE {
         }
 
         return st.size() == 0;
+    }
+
+    // leetcode 856
+    public int scoreOfParentheses(String s) {
+        LinkedList<Integer> st = new LinkedList<>();
+        st.addFirst(0);
+
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch == '(')
+                st.addFirst(0);
+            else {
+                int a = st.removeFirst();
+                int b = st.removeFirst();
+
+                int val = b + Math.max(2 * a, 1);
+                st.addFirst(val);
+            }
+        }
+
+        return st.removeFirst();
+    }
+
+    // Ye revise karni hai class Missed
+
+    // 7n
+    public int largestRectangleArea_01(int[] heights) {
+        int[] nsol = NSEonLeft(heights); // 3n
+        int[] nsor = NSEonRight(heights); // 3n
+
+        int maxArea = 0;
+        for (int i = 0; i < heights.length; i++) { // n
+            maxArea = Math.max(maxArea, heights[i] * (nsor[i] - nsol[i] - 1));
+        }
+
+        return maxArea;
+    }
+
+    // 84
+    // 2n
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length, maxArea = 0;
+        LinkedList<Integer> st = new LinkedList<>();
+        st.addFirst(-1);
+
+        for (int i = 0; i < n; i++) {
+            while (st.getFirst() != -1 && heights[st.getFirst()] >= heights[i]) {
+                int h = heights[st.removeFirst()];
+                int w = i - st.getFirst() - 1;
+                maxArea = Math.max(maxArea, h * w);
+            }
+            st.addFirst(i);
+        }
+
+        while (st.getFirst() != -1) {
+            int h = heights[st.removeFirst()];
+            int w = n - st.getFirst() - 1;
+            maxArea = Math.max(maxArea, h * w);
+        }
+
+        return maxArea;
+    }
+
+    // 85
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        int n = matrix.length, m = matrix[0].length;
+        int[] height = new int[m];
+        int maxArea = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++)
+                height[j] = matrix[i][j] == '0' ? 0 : height[j] + 1;
+            maxArea = Math.max(maxArea, largestRectangleArea(height));
+        }
+
+        return maxArea;
+    }
+
+    // 32
+    public int longestValidParentheses(String s) {
+        int n = s.length(), maxLen = 0;
+        LinkedList<Integer> st = new LinkedList<>();
+        st.addFirst(-1);
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if (ch == ')' && st.getFirst() != -1 && s.charAt(st.getFirst()) == '(') {
+                st.removeFirst();
+                maxLen = Math.max(maxLen, i - st.getFirst());
+            } else
+                st.addFirst(i);
+        }
+
+        return maxLen;
+    }
+
+    // 07/10/2021
+
+    // leetcode 402. Remove K Digits
+    public static String removeKdigits(String num, int k) {
+
+        ArrayList<Character> st = new ArrayList<>();
+
+        for (int i = 0; i < num.length(); i++) {
+            char ch = num.charAt(i);
+            while (st.size() != 0 && st.get(st.size() - 1) > ch && k > 0) {
+                k--;
+                st.remove(st.size() - 1);
+            }
+
+            st.add(ch);
+        }
+
+        while (k-- > 0)
+            st.remove(st.size() - 1);
+
+        StringBuilder sb = new StringBuilder();
+        boolean flag = false;
+
+        for (char ch : st) {
+            if (ch == '0' && !flag)
+                continue;
+
+            flag = true;
+            sb.append(ch);
+        }
+
+        return sb.length() != 0 ? sb.toString() : "0";
+
+    }
+
+    // leetcode 316. Remove Duplicate Letters
+    public String removeDuplicateLetters(String num) {
+        ArrayList<Character> st = new ArrayList<>();
+
+        boolean visited[] = new boolean[26];
+        int freq[] = new int[26];
+
+        for (int i = 0; i < num.length(); i++)
+            freq[num.charAt(i) - 'a']++;
+
+        for (int i = 0; i < num.length(); i++) {
+
+            char ch = num.charAt(i);
+
+            freq[ch - 'a']--;
+            if (visited[ch - 'a'])
+                continue;
+            while (st.size() != 0 && st.get(st.size() - 1) > ch && freq[st.get(st.size() - 1) - 'a'] > 0) {
+                visited[st.get(st.size() - 1) - 'a'] = false;
+                st.remove(st.size() - 1);
+            }
+
+            visited[ch - 'a'] = true;
+            st.add(ch);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char ch : st) {
+            sb.append(ch);
+        }
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {
