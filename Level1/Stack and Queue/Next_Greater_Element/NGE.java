@@ -1,6 +1,8 @@
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NGE {
 
@@ -381,6 +383,90 @@ public class NGE {
         }
 
         return sb.toString();
+    }
+
+    // missed question need to revise
+    // leetcode 1249
+    public String minRemoveToMakeValid(String s) {
+        int n = s.length();
+        LinkedList<Integer> st = new LinkedList<>();
+        char[] chArr = s.toCharArray();
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if (ch == ')') {
+                if (st.size() != 0)
+                    st.removeFirst();
+                else
+                    chArr[i] = '#';
+            } else if (ch == '(')
+                st.addFirst(i);
+        }
+
+        while (st.size() != 0)
+            chArr[st.removeFirst()] = '#';
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            if (chArr[i] != '#')
+                sb.append(s.charAt(i));
+
+        }
+
+        return sb.toString();
+    }
+
+    // Home work : String : (((abc)))()(fd)(d(f)())
+
+    // leetcode 895. Maximum Frequency Stack
+    class FreqStack {
+        private class pair implements Comparable<pair> {
+
+            int idx = 0, val = 0, freq = 0;
+
+            pair(int val, int idx, int freq) {
+                this.idx = idx;
+                this.val = val;
+                this.freq = freq;
+            }
+
+            public int compareTo(pair o) {
+                if (this.freq == o.freq) {
+                    return o.idx - this.idx;
+                } else {
+                    return o.freq - this.freq;
+                }
+            }
+        }
+
+        private PriorityQueue<pair> st;
+        private HashMap<Integer, Integer> freq;
+        private int idx = 0;
+
+        public FreqStack() {
+            st = new PriorityQueue<>();
+            freq = new HashMap<>();
+        }
+
+        public void push(int val) {
+            freq.put(val, freq.getOrDefault(val, 0) + 1);
+            st.add(new pair(val, idx++, freq.get(val)));
+        }
+
+        public int pop() {
+            pair rv = st.remove();
+            freq.put(rv.val, rv.freq - 1);
+            if (freq.get(rv.val) == 0) {
+                freq.remove(rv.val);
+            }
+
+            return rv.val;
+        }
+
+        public int top() {
+            pair pk = st.peek();
+            return pk.val;
+        }
     }
 
     public static void main(String[] args) {
