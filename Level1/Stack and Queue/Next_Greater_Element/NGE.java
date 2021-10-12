@@ -469,6 +469,116 @@ public class NGE {
         }
     }
 
+    // 155
+    class MinStack {
+        LinkedList<Long> st = new LinkedList<>();
+        long minSf = 0;
+
+        public MinStack() {
+
+        }
+
+        public void push(int val) {
+            long x = val;
+            if (st.size() == 0) {
+                st.addFirst(x);
+                minSf = x;
+                return;
+            }
+
+            if (x < minSf) {
+                st.addFirst(2 * x - minSf);
+                minSf = x;
+            } else {
+                st.addFirst(x);
+            }
+        }
+
+        public void pop() {
+            if (st.getFirst() < minSf) {
+                minSf = 2 * minSf - st.getFirst();
+            }
+
+            st.removeFirst();
+        }
+
+        public int top() {
+            if (st.getFirst() < minSf) {
+                return (int) minSf;
+            }
+
+            return (int) (long) st.getFirst();
+        }
+
+        public int getMin() {
+            return (int) minSf;
+        }
+    }
+
+    // 12th OCt before Mehndi
+    public static  int[] exclusiveTime(int n, List<String> logs) {
+        class logPair {
+            int id, timeStamp, sleepTime;
+            boolean isStart = false;
+
+            logPair(String str) {
+                String[] ar = str.split(":");
+                this.id = Integer.parseInt(ar[0]);
+                this.timeStamp = Integer.parseInt(ar[2]);
+                this.isStart = ar[1].equals("start");
+                this.sleepTime = 0;
+            }
+        }
+
+        LinkedList<logPair> st = new LinkedList<>();
+        int[] ans = new int[n];
+
+        for (String s : logs) {
+            logPair log = new logPair(s);
+
+            if (log.isStart)
+                st.addFirst(log);
+            else {
+                logPair rp = st.removeFirst();
+                ans[rp.id] += log.timeStamp - rp.timeStamp + 1 - rp.sleepTime;
+
+                if (st.size() != 0)
+                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp + 1;
+            }
+        }
+
+        return ans;
+    }
+
+    // 853
+    public int carFleet(int target, int[] position, int[] speed) {
+        int n = speed.length;
+
+        // {position, time}
+        double[][] disTimeData = new double[n][2];
+        for (int i = 0; i < n; i++) {
+            disTimeData[i][0] = position[i] * 1.0;
+            disTimeData[i][1] = ((target - position[i]) * 1.0) / speed[i];
+        }
+
+        Arrays.sort(disTimeData, (a, b) -> {
+            return (int) (a[0] - b[0]);
+        });
+
+        int carFleet = 1;
+        double prevTime = disTimeData[n - 1][1];
+        for (int i = n - 2; i >= 0; i--) {
+            if (disTimeData[i][1] > prevTime) {
+                prevTime = disTimeData[i][1];
+                carFleet++;
+            } else {
+                // fleet will be same;
+            }
+        }
+
+        return carFleet;
+    }
+
     public static void main(String[] args) {
         int arr[] = { 2, 1, 3, 1, 2, 4, 5, 9, 6 };
         int ans[] = NSEonRight(arr);
